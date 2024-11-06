@@ -23,7 +23,9 @@ pub fn main() anyerror!void {
     while (!rl.windowShouldClose()) { // Detect window close button or ESC key
         // Update
         //----------------------------------------------------------------------------------
-        game_ball.update();
+        const dt = rl.getFrameTime();
+
+        game_ball.update(dt);
         //----------------------------------------------------------------------------------
 
         // Draw
