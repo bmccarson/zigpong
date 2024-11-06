@@ -24,15 +24,29 @@ pub const Ball = struct {
 
     pub fn update(self: *Ball, dt: f32) void {
         self.position.x += self.direction.x * self.speed * dt;
+        self.position.y += self.direction.y * self.speed * dt;
+        self.wall_collision();
+    }
 
-        if (self.position.x <= 0 or self.position.x + self.size.x >= settings.SCREEN_WIDTH) {
-            self.direction.x *= -1;
+    fn wall_collision(self: *Ball) void {
+        if (self.position.y <= 0) {
+            self.position.y = 0;
+            self.direction.y *= -1;
+        }
+        if (self.position.y + self.size.y >= settings.SCREEN_HEIGHT) {
+            self.position.y = settings.SCREEN_HEIGHT - self.size.y;
+            self.direction.y *= -1;
         }
 
-        self.position.y += self.direction.y * self.speed * dt;
+        if (self.position.x <= 0 or self.position.x >= settings.SCREEN_WIDTH) {
+            self.reset();
+        }
+    }
 
-        if (self.position.y <= 0 or self.position.y + self.size.y >= settings.SCREEN_HEIGHT) {
-            self.direction.y *= -1;
+    fn reset(self: *Ball) void {
+        if (self.position.x <= 0 or self.position.x + self.size.x >= settings.SCREEN_WIDTH) {
+            self.position.x = (settings.SCREEN_WIDTH / 2) - (self.size.x / 2);
+            self.position.y = (settings.SCREEN_HEIGHT / 2) - (self.size.y / 2);
         }
     }
 };
